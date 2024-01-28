@@ -1,0 +1,51 @@
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using Редактор_сайт.Models;
+
+namespace Редактор_сайт.Controllers
+{
+    public class HomeController : Controller
+	{
+		private readonly ILogger<HomeController> _logger;
+
+		public HomeController(ILogger<HomeController> logger)
+		{
+			_logger = logger;
+		}
+
+		public IActionResult Index()//переход на главную страничку
+		{
+			Text textBox = new Text();//по-другому не работает, нужен объект изначально
+			return View(textBox);
+		}
+        
+		//это чтобы нельзя было перейти по прямому адресу
+        public IActionResult Offormlenie(Text textBox)//содержит инфу от пользователя
+        {
+           //if (ModelState.IsValid)//корректны ли данные
+           {
+				//теперь надо отрапить данные на оформление
+				if (textBox.Текст != "" && textBox.Текст!=null)
+				{
+					string[] paragraphs = textBox.Текст.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+					string text = Ofform.Start(paragraphs);
+					Ofform.index = 0;
+
+					textBox.Текст_после = text;
+				}
+				else 
+					textBox.Текст_после = "";
+
+           }
+		   ModelState.Clear();
+
+            return View("Index",textBox);//возвращаем индекс в папке home
+        }
+       
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		public IActionResult Error()
+		{
+			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+		}
+	}
+}

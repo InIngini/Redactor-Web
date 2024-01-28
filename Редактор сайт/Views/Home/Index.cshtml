@@ -1,0 +1,21 @@
+﻿@model Text 
+@{
+    ViewData["Title"] = "Редактор";
+}
+
+<h1>Редактор</h1>
+
+<form method="post" asp-controller="Home" asp-action="Offormlenie">
+    <label asp-for="Текст"></label>
+    <textarea asp-for="Текст"></textarea>
+    <span asp-validation-for="Текст"></span>
+    
+    <input type="submit" value="Редактировать" />
+
+    @* я не знаю почему, но у меня работает только так *@
+    @if (!string.IsNullOrEmpty(Model.Текст_после))
+    {
+        <label asp-for="Текст_после"></label>
+        <textarea readonly asp-for="Текст_после"></textarea>
+    }
+</form>
