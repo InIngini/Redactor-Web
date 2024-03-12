@@ -15,7 +15,8 @@
     <span asp-validation-for="Email"></span>
 
     <label asp-for="Message"></label>
-    <input asp-for="Message" />
+    @* <input asp-for="Message" /> *@
+    <textarea asp-for="Message"></textarea>
     <span asp-validation-for="Message"></span>
 
     <input type="submit" value="Отправить" />

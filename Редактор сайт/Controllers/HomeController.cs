@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using Редактор_сайт.Models;
 
@@ -7,17 +8,53 @@ namespace Редактор_сайт.Controllers
     public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
-
+		
 		public HomeController(ILogger<HomeController> logger)
 		{
 			_logger = logger;
-		}
+            isFirstUserVisit = true;
+        }
 
-		public IActionResult Index()//переход на главную страничку
-		{
-			Text textBox = new Text();//по-другому не работает, нужен объект изначально
-			return View(textBox);
-		}
+        private static bool isFirstUserVisit = true;
+        private static readonly object lockObject = new object();
+        public IActionResult Index()//переход на главную страничку
+        {
+            // Проверяем, был ли уже первый визит пользователя
+            if (isFirstUserVisit)
+            {
+                lock (lockObject)
+                {
+                    if (isFirstUserVisit)
+                    {
+                        string ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+                        // Ваш код, который должен выполниться только один раз
+                        // Получение строки подключения из appsettings.json
+                        string connectionString = "workstation id=InStories.mssql.somee.com;packet size=4096;user id=Ingini_SQLLogin_1;pwd=m19zvm8xz9;data source=InStories.mssql.somee.com;persist security info=False;initial catalog=InStories;TrustServerCertificate=True";
+                        // Создание подключения и команды
+                        using (SqlConnection connection = new SqlConnection(connectionString))
+                        {
+                            connection.Open();
+
+                            // Создание SQL-запроса с параметрами
+                            string query = "INSERT INTO statistika (IPAddress,Time) VALUES (@IPAddress, @Time)";
+                            using (SqlCommand command = new SqlCommand(query, connection))
+                            {
+                                command.Parameters.AddWithValue("@IPAddress", ipAddress);
+                                command.Parameters.AddWithValue("@Time", (DateTime.Now).ToString("yyyy-MM-dd HH:mm:ss"));
+
+                                // Выполнение команды вставки
+                                command.ExecuteNonQuery();
+                            }
+                        }
+                        isFirstUserVisit = false;
+                    }
+                }
+            }
+
+
+            Text textBox = new Text();//по-другому не работает, нужен объект изначально
+            return View(textBox);
+        }
         
 		//это чтобы нельзя было перейти по прямому адресу
         public IActionResult Offormlenie(Text textBox)//содержит инфу от пользователя

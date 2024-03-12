@@ -22,7 +22,7 @@
         {
             for (int i = 0; i < text.Length; i++)
             {
-                abz = text[i] + "\n";
+                abz = text[i].Replace("\r", "") + "\n";
 
                 ZamenaChertochke();//замена маленького тире на большое
                 Tab();//табуляция
@@ -43,7 +43,7 @@
         public static void Tab()//табуляция
         {
             if (abz != "<tab>\n" && abz.Length >= 5 && abz[0..5] != "<tab>" //не пустая строка с таб и длина больше 5 и таба нет
-                || abz.Length < 5 && abz != "\n")//или длина меньше 5 и не пустая строка
+                || abz.Length < 5 && abz != "\n" && abz != "\r\n")//или длина меньше 5 и не пустая строка
                 abz = "<tab>" + abz.TrimStart();//добавляем таб
         }
         public static void Abz()//абзац
@@ -67,7 +67,7 @@
                     abz = "";
                 else
                 {
-                    if (pred_pust == false && abz != "\n" && abz != "<tab>\n" //не пустая строка или до этого была не пустая и
+                    if (pred_pust == false && abz != "\n" && abz != "<tab>\n"//не пустая строка или до этого была не пустая и
                         && (abz.TrimStart()[5] == '—' && pred_adz == false //(диалог и предыдущий абзац - текст или 
                         || abz.TrimStart()[5] != '—' && pred_adz == true))//текст и предыдущий абзац - диалог)
                         abz = "\n" + abz.TrimStart();//разделяем их абзацем
@@ -95,7 +95,7 @@
                 abz = abz.Substring(0, abz.Length - 1).TrimEnd();
                 if (abz != "" && abz[abz.Length - 1] != '.' && abz[abz.Length - 1] != '!'
                     && abz[abz.Length - 1] != '?' && abz[abz.Length - 1] != ':' && abz[abz.Length - 1] != '>'
-                    && abz[abz.Length - 1] != '"')
+                    && abz[abz.Length - 1] != '"' && abz[abz.Length - 1] != '»')
                 {
                     abz = abz.TrimEnd() + ".";
                 }
