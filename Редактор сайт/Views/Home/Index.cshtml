@@ -6,6 +6,50 @@
 <h1>Редактор</h1>
 
 <form method="post" asp-controller="Home" asp-action="Offormlenie">
+
+    <div id="radioBox">
+        <label class="radio-label">
+            Добавлять ли &lt;tab&gt; и &lt;center&gt;?
+        </label>
+        <div class="radio-group">
+            <label for="optionYes" class="radio-option">
+                <input type="radio" id="optionYes" name="option" value="да" checked>
+                Да
+            </label>
+        </div>
+        <div class="radio-group">
+            <label for="optionNo" class="radio-option">
+                <input type="radio" id="optionNo" name="option" value="нет">
+                Нет
+            </label>
+        </div>
+
+    </div>
+    
+
+    <style>
+        .radio-group {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        #radioBox{
+            background-color: rgba(162, 128, 254, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+        }
+    </style>
+
     <label asp-for="Текст"></label>
     <textarea asp-for="Текст"></textarea>
     <span asp-validation-for="Текст"></span>

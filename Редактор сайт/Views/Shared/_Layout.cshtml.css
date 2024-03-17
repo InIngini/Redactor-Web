@@ -47,3 +47,21 @@ button.accept-policy {
   line-height: 60px;
 }
 
+.radio-label {
+	text-align: left;
+	margin-bottom: 10px;
+}
+
+.radio-group {
+	display: flex;
+	align-items: center;
+}
+
+.radio-option {
+	margin-right: 10px;
+}
+
+	.radio-option:last-child {
+		margin-right: 0;
+	}
+

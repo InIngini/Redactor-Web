@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Редактор_сайт.Models;
 
 namespace Редактор_сайт.Controllers
@@ -19,6 +20,7 @@ namespace Редактор_сайт.Controllers
         private static readonly object lockObject = new object();
         public IActionResult Index()//переход на главную страничку
         {
+
             // Проверяем, был ли уже первый визит пользователя
             if (isFirstUserVisit)
             {
@@ -57,24 +59,30 @@ namespace Редактор_сайт.Controllers
         }
         
 		//это чтобы нельзя было перейти по прямому адресу
-        public IActionResult Offormlenie(Text textBox)//содержит инфу от пользователя
+        public IActionResult Offormlenie(Text textBox, string option)//содержит инфу от пользователя
         {
-           //if (ModelState.IsValid)//корректны ли данные
-           {
-				//теперь надо отрапить данные на оформление
-				if (textBox.Текст != "" && textBox.Текст!=null)
-				{
-					string[] paragraphs = textBox.Текст.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-					string text = Ofform.Start(paragraphs);
-					Ofform.index = 0;
+            
 
-					textBox.Текст_после = text;
-				}
-				else 
-					textBox.Текст_после = "";
+            // Вызов метода Start с передачей выбранных опций
+            if (!string.IsNullOrEmpty(textBox.Текст) && textBox.Текст != null)
+            {
+                string[] paragraphs = textBox.Текст.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                string text = Ofform.Start(paragraphs);
+                Ofform.index = 0;
 
-           }
-		   ModelState.Clear();
+                // Проверка выбранного значения радиокнопки
+                if (option == "нет")
+                {
+                    text = text.Replace("<tab>", "").Replace("<center>", "").Replace("</center>", "\n");
+                }
+
+                textBox.Текст_после = text;
+            }
+            else
+            {
+                textBox.Текст_после = "";
+            }
+            ModelState.Clear();
 
             return View("Index",textBox);//возвращаем индекс в папке home
         }
