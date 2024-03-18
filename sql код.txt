@@ -1,18 +1,37 @@
 --1
+
 drop table Contacts;
+
 CREATE TABLE Contacts (
+
     id INT IDENTITY(1,1) PRIMARY KEY,
     Name NVARCHAR(50),
     Email NVARCHAR(50),
     Message NVARCHAR(MAX)
+
 );
+
 select * from Contacts;
+
 insert into Contacts (Name, Email, Message) values ('Даша','darvor@yandex.ru','Много букв');
+
 DELETE FROM Contacts;
 
+
+
 --2
-CREATE TABLE time_statistika (
-  id INT IDENTITY(1,1) PRIMARY KEY,
-  Time DATETIME
+
+drop table statistika;
+
+DELETE FROM statistika;
+
+CREATE TABLE statistika (
+ id INT IDENTITY(1,1) PRIMARY KEY,
+ IPAddress varchar(16),
+ Time DATETIME
+
 );
-select * from time_statistika;
+
+insert into statistika (IPAddress) values ('196.000.000.001');
+
+select * from statistika;
