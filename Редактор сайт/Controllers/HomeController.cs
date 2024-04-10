@@ -13,7 +13,7 @@ namespace Редактор_сайт.Controllers
 		public HomeController(ILogger<HomeController> logger)
 		{
 			_logger = logger;
-            isFirstUserVisit = true;
+            //isFirstUserVisit = true;
         }
 
         private static bool isFirstUserVisit = true;
@@ -22,11 +22,11 @@ namespace Редактор_сайт.Controllers
         {
 
             // Проверяем, был ли уже первый визит пользователя
-            if (isFirstUserVisit)
+            //if (isFirstUserVisit)
             {
-                lock (lockObject)
+                //lock (lockObject)
                 {
-                    if (isFirstUserVisit)
+                    //if (isFirstUserVisit)
                     {
                         string ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
                         // Ваш код, который должен выполниться только один раз
@@ -62,7 +62,6 @@ namespace Редактор_сайт.Controllers
         public IActionResult Offormlenie(Text textBox, string option)//содержит инфу от пользователя
         {
             
-
             // Вызов метода Start с передачей выбранных опций
             if (!string.IsNullOrEmpty(textBox.Текст) && textBox.Текст != null)
             {

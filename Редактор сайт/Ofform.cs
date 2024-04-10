@@ -14,7 +14,7 @@
             text = texty;
             text2 = "";
 
-            Reading();//основаная функция
+            Reading();//основная функция
 
             return text2;
         }
@@ -22,8 +22,9 @@
         {
             for (int i = 0; i < text.Length; i++)
             {
-                abz = text[i].Replace("\r", "") + "\n";
-
+                abz = text[i].Replace("\r", "");
+                abz = abz.TrimStart()+ "\n";
+                
                 ZamenaChertochke();//замена маленького тире на большое
                 Tab();//табуляция
                 Abz();//Абзацы между текстом и диалогами
@@ -38,6 +39,7 @@
         public static void ZamenaChertochke()//замена маленького тире на большое
         {
             abz = abz.Replace("- ", "— ");
+            abz = abz.Replace("— ", "— ");
         }
 
         public static void Tab()//табуляция
@@ -67,12 +69,12 @@
                     abz = "";
                 else
                 {
-                    if (pred_pust == false && abz != "\n" && abz != "<tab>\n"//не пустая строка или до этого была не пустая и
+                    if (pred_pust == false && abz != "\n" && abz != "<tab>\n" && abz != "<tab>"//не пустая строка или до этого была не пустая и
                         && (abz.TrimStart()[5] == '—' && pred_adz == false //(диалог и предыдущий абзац - текст или 
                         || abz.TrimStart()[5] != '—' && pred_adz == true))//текст и предыдущий абзац - диалог)
                         abz = "\n" + abz.TrimStart();//разделяем их абзацем
 
-                    if (abz == "\n" || abz == "<tab>\n")//если пустая строка
+                    if (abz == "\n" || abz == "<tab>\n" || abz == "<tab>")//если пустая строка
                         pred_pust = true;//тру если пусто
                     else
                     {
@@ -97,7 +99,9 @@
                     && abz[abz.Length - 1] != '?' && abz[abz.Length - 1] != ':' && abz[abz.Length - 1] != '>'
                     && abz[abz.Length - 1] != '"' && abz[abz.Length - 1] != '»')
                 {
-                    abz = abz.TrimEnd() + ".";
+                    if (!(abz.Length > 3 && abz[abz.Length - 1] == '.' && abz[abz.Length-2]=='.'&& //просто инвертирую. условие в том, что это не ?.. !.. или ...
+                        (abz[abz.Length - 3] == '.' || abz[abz.Length - 3] == '?' || abz[abz.Length - 3] == '!')))
+                         abz = abz.TrimEnd() + ".";
                 }
                 abz = abz + "\n";
             }
@@ -105,20 +109,26 @@
         public static void Zaglav()
         {
             char buk;
-            for (int i = 0; i < abz.Length; i++)
+            for (int i = 1; i < abz.Length-1; i++)
             {
                 if (abz[i] == '>')
                 {
-                    if (abz[i + 1] == '—' && char.IsLetter(abz[i + 3]))
+                    if (abz[i + 1] == '—' && char.IsLetter(abz[i + 3]) && !char.IsUpper(abz[i + 3]))
                     {
                         buk = char.ToUpper(abz[i + 3]);
                         abz = abz[0..(i + 3)] + buk + abz[(i + 4)..abz.Length];
                     }
-                    if (abz[i + 1] != '—' && char.IsLetter(abz[i + 1]))
+                    if (abz[i + 1] != '—' && char.IsLetter(abz[i + 1]) && !char.IsUpper(abz[i + 1]))
                     {
                         buk = char.ToUpper(abz[i + 1]);
                         abz = abz[0..(i + 1)] + buk + abz[(i + 2)..abz.Length];
                     }
+                }
+                if ((abz[i-1]=='.'|| abz[i - 1] == '?'|| abz[i - 1] == '!') && abz[i]==' '
+                    && char.IsLetter(abz[i+1]) && !char.IsUpper(abz[i + 1]))//предполагается, что мы сейчас на пробеле
+                {
+                    buk = char.ToUpper(abz[i + 1]);
+                    abz = abz[0..(i+1)] + buk + abz[(i + 2)..abz.Length];
                 }
             }
         }
