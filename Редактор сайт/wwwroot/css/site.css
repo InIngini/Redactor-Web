@@ -58,7 +58,7 @@ main label{
 	main input:not([type="submit"]){
 		width: 90%;
 		padding: 10px 14px;
-		font-size: 14px;
+		font-size: 16px;
 		border-radius: 5px;
 		border: 1px solid #956ae1;
 		outline: none;
@@ -74,7 +74,7 @@ main input[type="button"]  {
 	width: 40%;
 	padding: 10px 0;
 	text-align: center;
-	font-size: 15px;
+	font-size: 16px;
 	border-radius: 5px;
 	border: 0;
 	margin-top: 14px;
@@ -104,7 +104,7 @@ textarea {
 	
 	width: 90%;
 	padding: 10px 14px;
-	font-size: 14px;
+	font-size: 16px;
 	border-radius: 5px;
 	border: 1px solid #956ae1;
 	outline: none;
@@ -122,7 +122,7 @@ footer {
 	text-align: center; /* Выравнивание текста по центру */
 	padding: 10px 0; /* Внутренние отступы: 25px сверху и снизу, 0 слева и справа */
 	color: #956ae1; /* Цвет текста */
-	font-size: 14px;
+	font-size: 16px;
 	background: #161519; /* Фоновый цвет */
 	border-top: 0px solid #000; /* Граница сверху */
 }
@@ -130,7 +130,8 @@ footer {
 		text-decoration: none;
 		color: white;
 	}
-	#link{
+	#link {
+		font-size: 16px;
 		margin-bottom: 5px;
 	}
 
@@ -175,7 +176,7 @@ input[type="radio"] {
 	height: 50px;
 	color: white;
 	font-weight: bold;
-	font-size: 14px;
+	font-size: 16px;
 	opacity: 0;
 	animation: fade-in-out 2s ease-in-out;
 }
@@ -279,6 +280,7 @@ input[type="radio"] {
 	z-index: 9999;
 	width: 30%;
 	height: 10%;
+	font-size:16px;
 }
 
 .input-container {
@@ -350,6 +352,7 @@ input[type="radio"] {
 		align-items: center;
 		margin-right: 14px;
 		text-align: center;
+		font-size:16px;
 	}
 
 	.block .textarea {
@@ -365,13 +368,13 @@ input[type="radio"] {
 	}
 
 /* Медиа-запрос для вертикального расположения на маленьких экранах */
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
 
 	.block {
 		width: 45%;
 	}
 }
-@media (max-width: 800px) {
+@media (max-width: 900px) {
 	.example{
 		flex-direction: column;
 		align-items: flex-start;
