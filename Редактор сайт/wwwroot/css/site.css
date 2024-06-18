@@ -157,7 +157,14 @@ input[type="radio"] {
 	width: 90%;
 	font-size: 16px;
 }
-
+#instrackt {
+	margin-top: 10px;
+	background-color: rgba(162, 128, 254, 0.5);
+	padding: 20px;
+	border-radius: 12px;
+	width: 90%;
+	font-size: 16px;
+}
 #copyMessage {
 	display: flex;
 	justify-content: center;
@@ -316,13 +323,19 @@ input[type="radio"] {
 		background-color: #221638;
 	}
 
-
-#exampleLabel {
-	margin-top:25px;
+#instracktLabel {
+	margin-top: 25px;
 	font-weight: bold;
 	margin-right: 10px;
 	font-size: 18px;
-	margin-bottom:10px;
+	margin-bottom: 10px;
+}
+#exampleLabel {
+	margin-top: 25px;
+	font-weight: bold;
+	margin-right: 10px;
+	font-size: 18px;
+	margin-bottom: 10px;
 }
 
 .example {
@@ -331,6 +344,14 @@ input[type="radio"] {
 	flex-wrap: wrap;
 	justify-content: flex-start;
 	gap: 10px;
+
+	margin-top: 10px;
+	background-color: rgba(162, 128, 254, 0.5);
+	padding: 20px;
+	border-radius: 12px;
+	width: 90%;
+	font-size: 16px;
+
 }
 
 .block {
