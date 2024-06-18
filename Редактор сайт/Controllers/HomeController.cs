@@ -61,12 +61,15 @@ namespace Редактор_сайт.Controllers
 		//это чтобы нельзя было перейти по прямому адресу
         public IActionResult Offormlenie(Text textBox, string option)//содержит инфу от пользователя
         {
-            
-            if (Request.Form.ContainsKey("СlearText") && !string.IsNullOrEmpty(Request.Form["СlearText"]))
+            try
             {
-                // Очистить значение Текст в модели
-                textBox.Текст = string.Empty;
+                if (Request.Form.ContainsKey("ClearText") && !string.IsNullOrEmpty(Request.Form["ClearText"]))
+                {
+                    // Очистить значение Текст в модели
+                    textBox.Текст = string.Empty;
+                }
             }
+            catch (Exception ex) { }
 
             // Вызов метода Start с передачей выбранных опций
             if (!string.IsNullOrEmpty(textBox.Текст) && textBox.Текст != null)
