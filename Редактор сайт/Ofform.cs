@@ -27,7 +27,9 @@
             for (int i = 0; i < text.Length; i++)
             {
                 abz = text[i].Replace("\r", "");
-                abz = abz.TrimStart() + "\n";
+                if(abz.Trim()!="")
+                {
+abz = abz.TrimStart() + "\n";
 
                 ZamenaChertochke();//замена маленького тире на большое
                 Tab();//табуляция
@@ -38,6 +40,8 @@
 
                 text2 += abz;
                 index++;
+                }
+                
             }
         }
         public static void ZamenaChertochke()//замена маленького тире на большое
