@@ -67,7 +67,8 @@ namespace Редактор_сайт.Controllers
             {
                 string[] paragraphs = textBox.Текст.Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 string text = Ofform.Start(paragraphs);
-                
+                Ofform.index = 0;
+
                 // Проверка выбранного значения радиокнопки
                 if (option == "нет")
                 {
