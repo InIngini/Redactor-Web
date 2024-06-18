@@ -11,14 +11,10 @@
 
         public static string Start(string[] texty)//чтение из файла
         {
-            pred_adz = false;
-            pred_pust=true;
             text = texty;
             text2 = "";
 
             Reading();//основная функция
-
-            text2.Trim();
 
             return text2;
         }
@@ -42,9 +38,6 @@
         }
         public static void ZamenaChertochke()//замена маленького тире на большое
         {
-            if ((abz[0] == '-' || abz[0] == '—') && abz.Length > 1 && char.IsLetter(abz[1]))
-                abz = abz[0] + " " + abz[1..(abz.Length - 1)];
-
             abz = abz.Replace("- ", "— ");
             abz = abz.Replace("— ", "— ");
         }
@@ -104,7 +97,7 @@
                 abz = abz.Substring(0, abz.Length - 1).TrimEnd();
                 if (abz != "" && abz[abz.Length - 1] != '.' && abz[abz.Length - 1] != '!'
                     && abz[abz.Length - 1] != '?' && abz[abz.Length - 1] != ':' && abz[abz.Length - 1] != '>'
-                    && abz[abz.Length - 1] != '"' && abz[abz.Length - 1] != '»' && abz[abz.Length - 1] != '…')
+                    && abz[abz.Length - 1] != '"' && abz[abz.Length - 1] != '»')
                 {
                     if (!(abz.Length > 3 && abz[abz.Length - 1] == '.' && abz[abz.Length-2]=='.'&& //просто инвертирую. условие в том, что это не ?.. !.. или ...
                         (abz[abz.Length - 3] == '.' || abz[abz.Length - 3] == '?' || abz[abz.Length - 3] == '!')))

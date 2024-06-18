@@ -7,7 +7,7 @@
 
 <form method="post" asp-controller="Home" asp-action="Offormlenie">
 
-    <div id="radioBox" style="position: relative;">
+    <div id="radioBox">
         <label class="radio-label">
             Добавлять ли &lt;tab&gt; и &lt;center&gt;?
         </label>
@@ -23,7 +23,7 @@
                 Нет
             </label>
         </div>
-        <img src="/cat3.svg" style="width:150px; height:150px; position: absolute; right: 20px; top: -15px;">
+
     </div>
     
 
@@ -32,13 +32,10 @@
     <span asp-validation-for="Текст"></span>
     
     <input type="submit" value="Редактировать" />
-    
 
     @* я не знаю почему, но у меня работает только так *@
     @if (!string.IsNullOrEmpty(Model.Текст_после))
     {
-        <input type="submit" value="Очистить" name="СlearText" style="margin-left: 10px;" />
-
         <label asp-for="Текст_после"></label>
         <textarea readonly asp-for="Текст_после"></textarea>
         <input type="button" value="Скопировать" onclick="copyToClipboard()" />
@@ -53,7 +50,7 @@
 
 рассмотрим парочку случаев: 
 - Вот это у нас диалог. обратите внимание, что после тире обязательно пробел
-- вот так работать будет!
+-вот так работать не будет...
 ***
 Как вы видите, диалог и простой текст разделяются абзацами.
 - Диалог.
@@ -75,7 +72,8 @@
 &lt;tab&gt;Рассмотрим парочку случаев:
 
 &lt;tab&gt;— Вот это у нас диалог. Обратите внимание, что после тире обязательно пробел.
-&lt;tab&gt;— Вот так работать будет!
+
+&lt;tab&gt;-вот так работать не будет...
 
 &lt;center&gt;***&lt;/center&gt;
 &lt;tab&gt;Как вы видите, диалог и простой текст разделяются абзацами.
@@ -98,7 +96,8 @@
 Рассмотрим парочку случаев:
 
 — Вот это у нас диалог. Обратите внимание, что после тире обязательно пробел.
-— Вот так работать будет!
+
+-вот так работать не будет...
 
 ***
 
@@ -144,5 +143,4 @@
         document.body.appendChild(message);
 
     }
-
 </script>
