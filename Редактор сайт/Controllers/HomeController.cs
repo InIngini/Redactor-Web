@@ -62,6 +62,12 @@ namespace Редактор_сайт.Controllers
         public IActionResult Offormlenie(Text textBox, string option)//содержит инфу от пользователя
         {
             
+            if (Request.Form.ContainsKey("СlearText") && !string.IsNullOrEmpty(Request.Form["СlearText"]))
+            {
+                // Очистить значение Текст в модели
+                textBox.Текст = string.Empty;
+            }
+
             // Вызов метода Start с передачей выбранных опций
             if (!string.IsNullOrEmpty(textBox.Текст) && textBox.Текст != null)
             {
@@ -73,6 +79,10 @@ namespace Редактор_сайт.Controllers
                 if (option == "нет")
                 {
                     text = text.Replace("<tab>", "").Replace("<center>", "").Replace("</center>", "\n");
+                }
+                else
+                {
+                    text = text.Replace("\n\n", "\n  \n");
                 }
 
                 textBox.Текст_после = text;

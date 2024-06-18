@@ -11,10 +11,14 @@
 
         public static string Start(string[] texty)//чтение из файла
         {
+            pred_adz = false;
+            pred_pust = true;
             text = texty;
             text2 = "";
 
             Reading();//основная функция
+
+            text2.Trim();
 
             return text2;
         }
@@ -23,8 +27,8 @@
             for (int i = 0; i < text.Length; i++)
             {
                 abz = text[i].Replace("\r", "");
-                abz = abz.TrimStart()+ "\n";
-                
+                abz = abz.TrimStart() + "\n";
+
                 ZamenaChertochke();//замена маленького тире на большое
                 Tab();//табуляция
                 Abz();//Абзацы между текстом и диалогами
@@ -38,6 +42,9 @@
         }
         public static void ZamenaChertochke()//замена маленького тире на большое
         {
+            if ((abz[0] == '-' || abz[0] == '—') && abz.Length > 1 && char.IsLetter(abz[1]))
+                abz = abz[0] + " " + abz[1..(abz.Length - 1)];
+
             abz = abz.Replace("- ", "— ");
             abz = abz.Replace("— ", "— ");
         }
@@ -97,11 +104,11 @@
                 abz = abz.Substring(0, abz.Length - 1).TrimEnd();
                 if (abz != "" && abz[abz.Length - 1] != '.' && abz[abz.Length - 1] != '!'
                     && abz[abz.Length - 1] != '?' && abz[abz.Length - 1] != ':' && abz[abz.Length - 1] != '>'
-                    && abz[abz.Length - 1] != '"' && abz[abz.Length - 1] != '»')
+                    && abz[abz.Length - 1] != '"' && abz[abz.Length - 1] != '»' && abz[abz.Length - 1] != '…')
                 {
-                    if (!(abz.Length > 3 && abz[abz.Length - 1] == '.' && abz[abz.Length-2]=='.'&& //просто инвертирую. условие в том, что это не ?.. !.. или ...
+                    if (!(abz.Length > 3 && abz[abz.Length - 1] == '.' && abz[abz.Length - 2] == '.' && //просто инвертирую. условие в том, что это не ?.. !.. или ...
                         (abz[abz.Length - 3] == '.' || abz[abz.Length - 3] == '?' || abz[abz.Length - 3] == '!')))
-                         abz = abz.TrimEnd() + ".";
+                        abz = abz.TrimEnd() + ".";
                 }
                 abz = abz + "\n";
             }
@@ -109,7 +116,7 @@
         public static void Zaglav()
         {
             char buk;
-            for (int i = 1; i < abz.Length-1; i++)
+            for (int i = 1; i < abz.Length - 1; i++)
             {
                 if (abz[i] == '>')
                 {
@@ -124,11 +131,11 @@
                         abz = abz[0..(i + 1)] + buk + abz[(i + 2)..abz.Length];
                     }
                 }
-                if ((abz[i-1]=='.'|| abz[i - 1] == '?'|| abz[i - 1] == '!') && abz[i]==' '
-                    && char.IsLetter(abz[i+1]) && !char.IsUpper(abz[i + 1]))//предполагается, что мы сейчас на пробеле
+                if ((abz[i - 1] == '.' || abz[i - 1] == '?' || abz[i - 1] == '!') && abz[i] == ' '
+                    && char.IsLetter(abz[i + 1]) && !char.IsUpper(abz[i + 1]))//предполагается, что мы сейчас на пробеле
                 {
                     buk = char.ToUpper(abz[i + 1]);
-                    abz = abz[0..(i+1)] + buk + abz[(i + 2)..abz.Length];
+                    abz = abz[0..(i + 1)] + buk + abz[(i + 2)..abz.Length];
                 }
             }
         }
