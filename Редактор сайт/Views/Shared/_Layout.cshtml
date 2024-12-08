@@ -4,120 +4,91 @@
 <head>
     <meta charset="utf-8" />
     <meta name="author" content="Ingini" />
-    <meta name="keywords" content="оформление,редактор,фикбук,ficbook,ingini,instories"
+    <meta name="keywords" content="оформление,редактор,фикбук,ficbook,ingini,instories" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
     <link href="/iconka2.ico" rel="shortcut icon" runat="server" type="image/x-icon" />
     <link href="/iconka2.ico" rel="icon" runat="server" type="image/ico" />
-
 </head>
 <body>
-   <header>
-       <span class="logo">InStories</span>
-       <nav>
-           <a href="/">Главная</a>
-           <a href="/contacts">Обратная связь</a>
-       </nav>
-   </header>
-   <main>
-       @RenderBody()
-       <div style="display:none;">
-           <img src="/catwww.png"/>
-       </div>
-        <div id="imageCat" >
+    <header>
+        <span class="logo">InStories</span>
+        <nav>
+            <a href="/">Главная</a>
+        </nav>
+    </header>
+    <main>
+        @RenderBody()
+        <div style="display:none;">
+            <img src="/catwww.png" />
+        </div>
+        <div id="imageCat">
             <div style="box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4); color: #fff; background-color: rgba(162, 128, 254, 0.5); padding: 20px; border-radius: 12px;">
-                <p style="text-align: center; font-size: 14px;">
-                    А вы любопытный!
-                </p>
+                <p style="text-align: center; font-size: 14px;">А вы любопытный!</p>
             </div>
             <img src="/cat12.png">
         </div>
 
         @{
-            /* c# код, я просто в шоке */
-            // Здесь идет ваш C# код для заполнения таблиц из базы данных
-
             string connectionString = "workstation id=InStories.mssql.somee.com;packet size=4096;user id=Ingini_SQLLogin_1;pwd=m19zvm8xz9;data source=InStories.mssql.somee.com;persist security info=False;initial catalog=InStories;TrustServerCertificate=True";
-            string contactsQuery = "SELECT * FROM Contacts";
-            string statisticQuery = "SELECT * FROM statistika";
 
-            string contactsTableHtml = "";
+            int totalCount = 0;
+            int lastYearCount = 0;
+            int lastMonthCount = 0;
+            int lastWeekCount = 0;
+            int todayCount = 0;
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                SqlCommand contactsCmd = new SqlCommand(contactsQuery, connection);
-                SqlDataReader contactsReader = contactsCmd.ExecuteReader();
 
-                while (contactsReader.Read())
+                // Получаем общее количество
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM statistika", connection))
                 {
-                    int id = (int)contactsReader["id"];
-                    string name = (string)contactsReader["Name"];
-                    string email = (string)contactsReader["Email"];
-                    string message = (string)contactsReader["Message"];
-
-                    string rowHtml = $"<tr><td>{id}</td><td>{name}</td><td>{email}</td><td>{message}</td></tr>";
-                    contactsTableHtml += rowHtml;
+                    totalCount = (int)cmd.ExecuteScalar();
                 }
 
-                contactsReader.Close();
-            }
-
-            // Аналогично заполняем таблицу "Статистика"
-
-            string statisticTableHtml = "";
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand statisticCmd = new SqlCommand(statisticQuery, connection);
-                SqlDataReader statisticReader = statisticCmd.ExecuteReader();
-
-                while (statisticReader.Read())
+                // Получаем количество за последний год
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM statistika WHERE Time >= DATEADD(YEAR, -1, GETDATE())", connection))
                 {
-                    int id = (int)statisticReader["id"];
-                    string ipAddress = (string)statisticReader["IPAddress"];
-                    string time = $"{ statisticReader["Time"]}";
-
-                    string rowHtml = $"<tr><td>{id}</td><td>{ipAddress}</td><td>{time}</td></tr>";
-                    statisticTableHtml += rowHtml;
+                    lastYearCount = (int)cmd.ExecuteScalar();
                 }
 
-                statisticReader.Close();
+                // Получаем количество за последний месяц
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM statistika WHERE Time >= DATEADD(MONTH, -1, GETDATE())", connection))
+                {
+                    lastMonthCount = (int)cmd.ExecuteScalar();
+                }
+
+                // Получаем количество за последнюю неделю
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM statistika WHERE Time >= DATEADD(WEEK, -1, GETDATE())", connection))
+                {
+                    lastWeekCount = (int)cmd.ExecuteScalar();
+                }
+
+                // Получаем количество за сегодня
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM statistika WHERE CAST(Time AS DATE) = CAST(GETDATE() AS DATE)", connection))
+                {
+                    todayCount = (int)cmd.ExecuteScalar();
+                }
             }
-
-
         }
 
-        @* если пароль верный, то появятся таблички *@
+        @* Если пароль верный, то появится график *@
         <div id="tableDisplay" style="display: none;">
             <h3>Статистика</h3>
-            <table id="statisticTable">
-                @Html.Raw(statisticTableHtml)
-            </table>
-            
-            @* <button id="deleteStatistic" onclick="DeleteStatistic()">Удалить</button> *@
-            
-            <h3>Обратная связь</h3>
-            <table id="contactsTable">
-                @Html.Raw(contactsTableHtml)
-            </table>
-            
-            @* <button id="deleteContacts" onclick="DeleteContacts()">Удалить</button> *@
+            <canvas id="statisticChart"></canvas>
         </div>
-
-
-   </main>
+    </main>
     <footer>
         <p id="link">
-            <a href="#" onclick="redirectToVK()" @* target="_blank" *@>VK</a>
-            <a href="#" onclick="redirectToGitHub()" @* target="_blank" *@>GitHub</a>
-            <a href="#" onclick="redirectToФикбук()" @* target="_blank" *@>Ficbook</a>
+            <a href="#" onclick="redirectToVK()">VK</a>
+            <a href="#" onclick="redirectToGitHub()">GitHub</a>
+            <a href="#" onclick="redirectToФикбук()">Ficbook</a>
         </p>
         <p onclick="showPasswordPrompt()">© Ingini</p>
-        @* <p>Все права защищены</p> *@
 
-        @* если нажать на ingini, то появится ввести пароль *@
         <div id="passwordPrompt" style="display: none; font-size: 14px;">
             <span id="closeButton">&#10006;</span>
             <input type="password" id="passwordInput">
@@ -125,9 +96,8 @@
         </div>
     </footer>
 
-    @* скрипт *@
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-
         function redirectToVK() {
             window.location.href = 'https://vk.com/lngini';
         }
@@ -140,48 +110,77 @@
             window.location.href = 'https://ficbook.net/authors/2049261';
         }
 
-        // если нажать, то меняем стиль на блок, то есть показываем
         function showPasswordPrompt() {
             document.getElementById("passwordPrompt").style.display = "block";
-
             var imageCat = document.getElementById("imageCat");
             imageCat.style.display = "block";
             setTimeout(function () {
                 imageCat.classList.add("show");
             }, 100);
-
         }
 
-        // если нажать проверить пароль, то 
         function checkPassword() {
-            //получаем пароль
             var password = document.getElementById("passwordInput").value;
-            //если пароль верный
             if (password === "inginistories") {
                 document.getElementById("passwordPrompt").style.display = "none";
                 document.getElementById("imageCat").style.display = "none";
                 document.getElementById("tableDisplay").style.display = "block";
-            
+                renderChart();
             } else {
                 alert("Неверный пароль");
             }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            // Получаем элементы
             var passwordPrompt = document.getElementById('passwordPrompt');
             var closeButton = document.getElementById('closeButton');
-
-            // Обработчик события 'click' для closeButton
             closeButton.addEventListener('click', function () {
                 passwordPrompt.style.display = 'none';
                 document.getElementById("imageCat").style.display = "none";
             });
         });
 
-  
-
+        function renderChart() {
+            var ctx = document.getElementById('statisticChart').getContext('2d');
+            var statisticChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Все время: ' + @totalCount,
+                        'Последний год: ' + @lastYearCount,
+                        'Последний месяц: ' + @lastMonthCount,
+                        'Последняя неделя: ' + @lastWeekCount,
+                        'Сегодня: ' + @todayCount
+                            ],
+                    datasets: [{
+                        label: 'Количество посещений',
+                        data: [@totalCount, @lastYearCount, @lastMonthCount, @lastWeekCount, @todayCount],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)', // Ярко-красный
+                            'rgba(54, 162, 235, 0.6)', // Ярко-синий
+                            'rgba(255, 206, 86, 0.6)', // Ярко-желтый
+                            'rgba(75, 192, 192, 0.6)', // Ярко-голубой
+                            'rgba(153, 102, 255, 0.6)' // Ярко-фиолетовый
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)', // Ярко-красный
+                            'rgba(54, 162, 235, 1)', // Ярко-синий
+                            'rgba(255, 206, 86, 1)', // Ярко-желтый
+                            'rgba(75, 192, 192, 1)', // Ярко-голубой
+                            'rgba(153, 102, 255, 1)' // Ярко-фиолетовый
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
     </script>
-
 </body>
 </html>

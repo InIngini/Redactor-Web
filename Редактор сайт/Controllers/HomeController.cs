@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Редактор_сайт.Models;
+using Редактор_сайт.UseCase;
 
 namespace Редактор_сайт.Controllers
 {
@@ -13,42 +14,29 @@ namespace Редактор_сайт.Controllers
 		public HomeController(ILogger<HomeController> logger)
 		{
 			_logger = logger;
-            //isFirstUserVisit = true;
         }
 
-        private static bool isFirstUserVisit = true;
-        private static readonly object lockObject = new object();
-        public IActionResult Index()//переход на главную страничку
+        public IActionResult Index() // Переход на главную страничку
         {
 
-            // Проверяем, был ли уже первый визит пользователя
-            //if (isFirstUserVisit)
+            string ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+            if (ipAddress != "::1")
             {
-                //lock (lockObject)
+                string connectionString = "workstation id=InStories.mssql.somee.com;packet size=4096;user id=Ingini_SQLLogin_1;pwd=m19zvm8xz9;data source=InStories.mssql.somee.com;persist security info=False;initial catalog=InStories;TrustServerCertificate=True";
+                // Создание подключения и команды
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    //if (isFirstUserVisit)
+                    connection.Open();
+
+                    // Создание SQL-запроса с параметрами
+                    string query = "INSERT INTO statistika (IPAddress,Time) VALUES (@IPAddress, @Time)";
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        string ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
-                        // Ваш код, который должен выполниться только один раз
-                        // Получение строки подключения из appsettings.json
-                        string connectionString = "workstation id=InStories.mssql.somee.com;packet size=4096;user id=Ingini_SQLLogin_1;pwd=m19zvm8xz9;data source=InStories.mssql.somee.com;persist security info=False;initial catalog=InStories;TrustServerCertificate=True";
-                        // Создание подключения и команды
-                        using (SqlConnection connection = new SqlConnection(connectionString))
-                        {
-                            connection.Open();
+                        command.Parameters.AddWithValue("@IPAddress", ipAddress);
+                        command.Parameters.AddWithValue("@Time", (DateTime.Now).ToString("yyyy-MM-dd HH:mm:ss"));
 
-                            // Создание SQL-запроса с параметрами
-                            string query = "INSERT INTO statistika (IPAddress,Time) VALUES (@IPAddress, @Time)";
-                            using (SqlCommand command = new SqlCommand(query, connection))
-                            {
-                                command.Parameters.AddWithValue("@IPAddress", ipAddress);
-                                command.Parameters.AddWithValue("@Time", (DateTime.Now).ToString("yyyy-MM-dd HH:mm:ss"));
-
-                                // Выполнение команды вставки
-                                command.ExecuteNonQuery();
-                            }
-                        }
-                        isFirstUserVisit = false;
+                        // Выполнение команды вставки
+                        command.ExecuteNonQuery();
                     }
                 }
             }
@@ -75,19 +63,16 @@ namespace Редактор_сайт.Controllers
             if (!string.IsNullOrEmpty(textBox.Текст) && textBox.Текст != null)
             {
                 string[] paragraphs = textBox.Текст.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                string text = Ofform.Start(paragraphs);
-                Ofform.index = 0;
-
-                // Проверка выбранного значения радиокнопки
-                if (option == "нет")
+                var data = new Data()
                 {
-                    text = text.Replace("<tab>", "").Replace("<center>", "").Replace("</center>", "\n");
-                }
-                else
-                {
-                    text = text.Replace("\n\n", "\n  \n");
-                }
+                    text = textBox.Текст,
+                    addTab = option == "нет" ? false : true,
+                    addParagraph = true // Пока так
+                };
+                var ofform = new Ofform();
+                var dataAfter = ofform.Format(data);
 
+                var text = dataAfter.text;
                 textBox.Текст_после = text;
             }
             else
