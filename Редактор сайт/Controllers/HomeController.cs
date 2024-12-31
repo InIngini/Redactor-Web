@@ -9,11 +9,11 @@ namespace Редактор_сайт.Controllers
 {
     public class HomeController : Controller
 	{
-		private readonly ILogger<HomeController> _logger;
+		private readonly ILogger<HomeController> Logger;
 		
 		public HomeController(ILogger<HomeController> logger)
 		{
-			_logger = logger;
+			Logger = logger;
         }
 
         public IActionResult Index() // Переход на главную страничку
@@ -41,13 +41,11 @@ namespace Редактор_сайт.Controllers
                 }
             }
 
-
             Text textBox = new Text();//по-другому не работает, нужен объект изначально
             return View(textBox);
         }
-        
-		//это чтобы нельзя было перейти по прямому адресу
-        public IActionResult Offormlenie(Text textBox, string option)//содержит инфу от пользователя
+
+        public IActionResult Offormlenie(Text textBox) // теперь только один параметр
         {
             try
             {
@@ -57,17 +55,21 @@ namespace Редактор_сайт.Controllers
                     textBox.Текст = string.Empty;
                 }
             }
-            catch (Exception ex) { }
+            catch (Exception ex)
+            {
+                // Обработка ошибок
+                Console.WriteLine(ex.Message);
+            }
 
-            // Вызов метода Start с передачей выбранных опций
-            if (!string.IsNullOrEmpty(textBox.Текст) && textBox.Текст != null)
+            // Вызов метода Start с передачью выбранных опций
+            if (!string.IsNullOrEmpty(textBox.Текст))
             {
                 string[] paragraphs = textBox.Текст.Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 var data = new Data()
                 {
                     text = textBox.Текст,
-                    addTab = option == "нет" ? false : true,
-                    addParagraph = true // Пока так
+                    addTab = textBox.OptionT == "да", // Преобразуем строку в булевое значение
+                    addParagraph = textBox.OptionP == "да" // Преобразуем строку в булевое значение
                 };
                 var ofform = new Ofform();
                 var dataAfter = ofform.Format(data);
@@ -79,12 +81,13 @@ namespace Редактор_сайт.Controllers
             {
                 textBox.Текст_после = "";
             }
+
             ModelState.Clear();
 
-            return View("Index",textBox);//возвращаем индекс в папке home
+            return View("Index", textBox); // возвращаем индекс в папке home
         }
-       
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

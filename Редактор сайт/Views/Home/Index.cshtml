@@ -7,25 +7,32 @@
 
 <form method="post" asp-controller="Home" asp-action="Offormlenie">
 
-    <div id="radioBox" style="position: relative;">
-        <label class="radio-label">
-            Добавлять ли &lt;tab&gt; и &lt;center&gt;?
-        </label>
-        <div class="radio-group">
-            <label for="optionYes" class="radio-option">
-                <input type="radio" id="optionYes" name="option" value="да" checked>
-                Да
-            </label>
+    <div id="radioBox">
+        <div id="radioBoxTeg">
+            <label class="radio-label">Добавлять ли &lt;tab&gt; и &lt;center&gt;?</label>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" asp-for="OptionT" value="да" checked> Да
+                </label>
+                <label class="radio-option">
+                    <input type="radio" asp-for="OptionT" value="нет"> Нет
+                </label>
+            </div>
         </div>
-        <div class="radio-group">
-            <label for="optionNo" class="radio-option">
-                <input type="radio" id="optionNo" name="option" value="нет">
-                Нет
-            </label>
+        <div id="radioBoxParagraph">
+            <label class="radio-label">Добавлять ли абзац между диалогом и текстом?</label>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" asp-for="OptionP" value="да" checked> Да
+                </label>
+                <label class="radio-option">
+                    <input type="radio" asp-for="OptionP" value="нет"> Нет
+                </label>
+            </div>
         </div>
-        <img src="/cat3.svg" style="width:150px; height:150px; position: absolute; right: 20px; top: -15px;">
+        <img src="/cat3.svg" class="cat-image" alt="Cat Image">
     </div>
-    
+
 
     <label asp-for="Текст"></label>
     <textarea id="myTextarea" asp-for="Текст"></textarea>
@@ -50,10 +57,10 @@
 Здравствуйте. это короткий пример для вас
 
 рассмотрим парочку случаев: 
-- Вот это у нас диалог. обратите внимание, что после тире обязательно пробел
--вот так работать будет тоже!
+- Вот это у нас диалог. обратите внимание, что тут есть пробел после тире
+-а тут нет! И так работать тоже будет!
 ***
-Как вы видите, диалог и простой текст разделяются абзацами.
+Как вы видите, диалог и простой текст могут разделяться абзацами (если вы этого хотите).
 - Диалог.
 - Очень интересный диалог. 
 Текст. 
@@ -67,13 +74,13 @@
             </textarea>
         </div>
         <div class="block">
-            <div class="label">С &lt;tab&gt; и &lt;center&gt;</div>
+            <div class="label">С &lt;tab&gt; и &lt;center&gt; и пустыми абзацами</div>
             <textarea readonly class="textarea" rows="10">
 &lt;tab&gt;Здравствуйте. Это короткий пример для вас.
 &lt;tab&gt;Рассмотрим парочку случаев:
 
-&lt;tab&gt;— Вот это у нас диалог. Обратите внимание, что после тире обязательно пробел.
-&lt;tab&gt;— Вот так работать будет тоже!
+&lt;tab&gt;— Вот это у нас диалог. Обратите внимание, что тут есть пробел после тире.
+&lt;tab&gt;— А тут нет! И так работать тоже будет!
 
 &lt;center&gt;***&lt;/center&gt;
 &lt;tab&gt;Как вы видите, диалог и простой текст разделяются абзацами.
@@ -88,21 +95,18 @@
             </textarea>
         </div>
         <div class="block">
-            <div class="label">Без &lt;tab&gt; и &lt;center&gt;</div>
+            <div class="label">Без &lt;tab&gt; и &lt;center&gt; и без пустых абзацев</div>
             <textarea readonly class="textarea" rows="10">
 Здравствуйте. Это короткий пример для вас.
 Рассмотрим парочку случаев:
-
-— Вот это у нас диалог. Обратите внимание, что после тире обязательно пробел.
-— Вот так работать будет тоже!
+— Вот это у нас диалог. Обратите внимание, что тут есть пробел после тире.
+— А тут нет! И так работать тоже будет!
 
 ***
 
-Как вы видите, диалог и простой текст разделяются абзацами.
-
+Как вы видите, диалог и простой текст не разделяются абзацами.
 — Диалог.
 — Очень интересный диалог.
-
 Текст.
 Еще можно поставить пустой абзац не к месту, но он не сохранится.
 Но много абзацев сведутся к одному.
@@ -110,6 +114,7 @@
             </textarea>
         </div>
     </div>
+
     <div id="instracktLabel">Функции</div>
     <label id="instrackt" style="display: block; text-align: left; margin-top: 20px;">
         Основная функция: редактирование текста с использованием инструментов, принятых на некоторых сайтах, в частности Фикбуке (&lt;tab&gt;, &lt;center&gt;).
@@ -117,8 +122,8 @@
         Конкретнее о подфункциях:
         <ol style="margin-left: 20px;">
             <li>Все короткие тире «-» заменяются на длинные «—», если это не дефис;</li>
-            <li>Каждый новый абзац начинается с отступа;</li>
-            <li>Между абзацами разного типа (простой текст и диалог) ставится пустая строка;</li>
+            <li>Каждый новый абзац начинается с отступа (если вы так хотите);</li>
+            <li>Между абзацами разного типа (простой текст и диалог) ставится пустая строка (если вы так хотите);</li>
             <li>Разделение в виде последовательности «***» или более, помещается в центр;</li>
             <li>Большое количество пустых строк сводится к одной;</li>
             <li>Повышение регистра первой буквы в абзаце и знака пунктуации;</li>

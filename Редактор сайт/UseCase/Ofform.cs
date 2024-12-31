@@ -165,6 +165,7 @@ namespace Редактор_сайт.UseCase
         {
             // Получаем последний символ абзаца
             char lastChar = _text[_numberParagraph].TrimEnd().LastOrDefault();
+            Console.WriteLine(lastChar);
             if (lastChar == '"')
             {
                 char lastLastChar = _text[_numberParagraph].Length > 2 ? _text[_numberParagraph][_text[_numberParagraph].Length - 2] : '"';
@@ -186,7 +187,7 @@ namespace Редактор_сайт.UseCase
         }
         private bool IsPunctuation(char character)
         {
-            // Проверяем, если символ является знаком препинания
+            // Проверяем, если символ является знаком препинания ?
             return character == '.' || character == '!' || character == '?' || character == ':' ||
                    character == '…' || character == ',' || character == '*';
         }
@@ -194,8 +195,10 @@ namespace Редактор_сайт.UseCase
         {
             // Заменяем кавычки-елочки на двойные кавычки
             _text[_numberParagraph] = _text[_numberParagraph]
+                .Replace("“", "\"")   // Заменяем открывающую елочку
+                .Replace("»", "\"")   // Заменяем закрывающую елочку
                 .Replace("«", "\"")   // Заменяем открывающую елочку
-                .Replace("»", "\"");   // Заменяем закрывающую елочку
+                .Replace("”", "\"");   // Заменяем закрывающую елочку
 
         }
         private void CapitalizeFirstLetters()

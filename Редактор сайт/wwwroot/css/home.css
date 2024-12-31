@@ -1,0 +1,178 @@
+﻿#radioBox {
+	position: relative;
+	margin-top: 10px;
+	background-color: rgba(162, 128, 254, 0.5);
+	padding: 20px;
+	border-radius: 12px;
+	width: 90%;
+	font-size: 16px;
+}
+
+.radio-label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.radio-group {
+	margin-bottom: 10px;
+}
+
+#radioBoxTeg, #radioBoxParagraph {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+}
+
+#radioBoxTeg {
+	margin-bottom: 15px;
+}
+
+	.radio-label {
+		margin-bottom: 5px; /* Отступ между меткой и радиокнопками */
+	}
+
+.radio-group {
+	display: flex; /* Используем flexbox для расположения радиокнопок по горизонтали */
+	gap: 10px; /* Отступ между радиокнопками */
+}
+
+.radio-option {
+	display: flex;
+	align-items: center; /* Выравнивание текста и радиокнопки по вертикали */
+}
+
+.cat-image {
+	width: 150px;
+	height: 150px;
+	position: absolute;
+	right: 20px;
+	top: 0px;
+}
+
+.clear-button {
+	margin-left: 15px;
+}
+
+textarea {
+	resize: vertical; /* Позволяет изменять размер только по вертикали */
+	height: 280px; /* Высота textarea в пикселях */
+
+	width: 90%;
+	padding: 10px 14px;
+	font-size: 16px;
+	border-radius: 5px;
+	border: 1px solid #956ae1;
+	outline: none;
+	margin-top: 7px;
+}
+
+input[type="radio"] {
+	margin-right: 5px;
+}
+
+#instrackt {
+	margin-top: 10px;
+	background-color: rgba(162, 128, 254, 0.5);
+	padding: 20px;
+	border-radius: 12px;
+	width: 90%;
+	font-size: 16px;
+}
+
+#copyMessage {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	bottom: 20%;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: rgba(162, 128, 254, 0.5);
+	padding: 10px;
+	border-radius: 10px;
+	text-align: center;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	z-index: 9999;
+	width: 200px;
+	height: 50px;
+	color: white;
+	font-weight: bold;
+	font-size: 16px;
+	opacity: 0;
+	animation: fade-in-out 2s ease-in-out;
+}
+
+@keyframes fade-in-out {
+	0% {
+		opacity: 0;
+	}
+
+	10% {
+		opacity: 1;
+	}
+
+	70% {
+		opacity: 1;
+	}
+
+	90% {
+		opacity: 0.5;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
+
+#exampleLabel {
+	margin-top: 25px;
+	font-weight: bold;
+	margin-right: 10px;
+	font-size: 18px;
+	margin-bottom: 10px;
+}
+
+.example {
+	display: flex; /* Используем Flexbox для расположения в ряд */
+	flex-wrap: wrap; /* Позволяем элементам переноситься на новую строку */
+	gap: 20px; /* Промежуток между блоками */
+	margin-top: 10px;
+	background-color: rgba(162, 128, 254, 0.5);
+	padding: 20px;
+	border-radius: 12px;
+	width: 90%;
+	font-size: 16px;
+}
+
+	.example .block {
+		flex: 1 1 300px; /* Элементы могут расти и сжиматься, минимальная ширина 300px */
+		min-width: 250px; /* Минимальная ширина блока */
+		max-width: 100%; /* Максимальная ширина блока */
+		margin-right: 15px;
+	}
+
+		.example .block .label {
+			min-width: 250px; /* Фиксированная ширина для лейбла */
+			height: 40px; /* Фиксированная высота для лейбла (по желанию) */
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+			font-size: 16px;
+		}
+
+		.example .block .textarea {
+			resize: vertical;
+			width: 100%;
+			padding: 10px;
+			font-size: 14px;
+			border-radius: 5px;
+			border: 1px solid #956ae1;
+			outline: none;
+			resize: none;
+			margin-top: 7px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень для визуального отделения блоков */
+			border: 1px solid #ccc; /* Граница для блоков */
+			border-radius: 5px; /* Закругление углов */
+			background-color: #f9f9f9; /* Цвет фона */
+		}

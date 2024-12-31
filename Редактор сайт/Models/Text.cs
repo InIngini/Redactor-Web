@@ -6,11 +6,15 @@ namespace Редактор_сайт.Models
     public class Text
     {
         [Display(Name = "Введите текст")]
-        //[MinLength(2, ErrorMessage = "Пусто... У вас творческий кризис?")]
-        //[Required(ErrorMessage = "Поле 'Введите текст' должно быть заполнено")]
         public string Текст { get; set; }
 
         [Display(Name = "Оформленный текст")]
         public string Текст_после { get; set; }
+
+        [Display(Name = "Добавлять ли &lt;tab&gt; и &lt;center&gt;?")]
+        public string OptionT { get; set; } // Для первой группы радиокнопок
+
+        [Display(Name = "Добавлять ли абзац между диалогом и текстом?")]
+        public string OptionP { get; set; } // Для второй группы радиокнопок
     }
 }
