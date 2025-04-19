@@ -35,9 +35,11 @@
 
 
     <label asp-for="Текст"></label>
-    <textarea id="myTextarea" asp-for="Текст"></textarea>
+    <textarea id="myTextarea" asp-for="Текст" oninput="countWords()"></textarea>
     <span asp-validation-for="Текст"></span>
-    
+
+    <div id="wordCount">Количество слов: 0</div>
+    <div id="charCount">Количество слов: 0 / 100 000</div>
     <input type="submit" value="Редактировать" />
 
     @* я не знаю почему, но у меня работает только так *@
@@ -161,5 +163,16 @@
         }
     });
 
+    function countWords() {
+        const text = document.getElementById("myTextarea").value;
+        // Разбиваем текст по пробелам и удаляем лишние пробелы
+        const words = text.split(/\s+/); // Разделяем по пробелам
+        // Подсчитываем количество "слов", которые содержат хотя бы одну букву
+        const wordCount = words.filter(word => /[a-zA-Zа-яА-ЯёЁ]/.test(word)).length;
+        const charCount = text.length;
 
+        // Обновляем счетчики
+        document.getElementById("wordCount").textContent = "Количество слов: " + wordCount;
+        document.getElementById("charCount").textContent = "Количество символов: " + charCount +" / 100 000";
+    }
 </script>
