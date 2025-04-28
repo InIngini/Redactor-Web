@@ -160,6 +160,8 @@
 
             // Отображаем сообщение об ошибке
             alert('Превышен лимит символов (100 000).');
+
+            countWords();
         }
     });
 
@@ -175,4 +177,6 @@
         document.getElementById("wordCount").textContent = "Количество слов: " + wordCount;
         document.getElementById("charCount").textContent = "Количество символов: " + charCount +" / 100 000";
     }
+
+    countWords();
 </script>
